@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="webapp" />
+        <module name="searchengine" />
+        <module name="service" />
+        <module name="syncnode" />
+        <module name="model" />
+        <module name="api-server" />
+        <module name="tron-cli" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="protocol" target="1.8" />
+      <module name="tron-java-cli" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

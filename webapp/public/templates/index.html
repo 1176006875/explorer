@@ -1,0 +1,168 @@
+{% extends "main" %} 
+
+{% block title %}TRON Block Explorer{% endblock %}
+{%block description%}TRXPlorer.io is a blockchain explorer for the Tron protocol. You can track every blocks, transactions, address, and coins/tokens and other assets on the blockchain.{%endblock%}
+
+{% block content %}
+
+<div class="eyecatcher"></div>
+<div style="border-bottom:none;" class="ui vertical masthead center aligned segment hero">
+
+    <div class="ui container homemenu">
+      <div class="ui stackable large secondary pointing menu">
+
+		<a class="active item nomobile" href="#search">Home</a>
+        <a class="item nomobile" href="/blocks">Blocks</a>
+        <a class="item nomobile" href="/transactions">Transactions</a>
+        <a class="item nomobile" href="/nodes">Nodes</a>
+	  	<a class="item nomobile" href="/representatives" >Representatives</a>
+	  	<a class="item nomobile" href="/votes" >Votes</a>
+        <a class="item nomobile" href="/accounts">Accounts</a>
+        <a class="item nomobile" href="/tokens">Tokens</a>
+        <a class="item nomobile" href="/markets">Markets</a>
+        <a class="item nomobile" href="/charts">Charts</a>
+	  <span class="mobile-only">
+	  <a id="mobile-menu" class="item right floated " href="#" ><i class="sidebar icon"></i> Menu</a>
+	  </span>
+      </div>
+
+    </div>
+	<br><br>
+    <div class="ui text container">
+     <img alt="" src="/img/logo_30.png" />
+      <h1 class="ui header">
+        TRXPL<i class="search icon" style="margin-right:-5px;"></i>RER.io
+      </h1>
+      <h2><a name="search"></a><a name="search"></a>Tron Blockchain Explorer</h2>
+      <form action="/search" method="post">
+		<div class="ui category search">
+		  <div class="ui massive icon input">
+		    <input name="q" class="prompt" type="text" placeholder="Address, Hash, Token ...">
+		    <i class="search icon"></i>
+		  </div>
+		  <div class="results"></div>
+		</div>
+	 </form>
+	
+    </div>
+
+  </div>
+<div class="ui stripe segment" style="background: #f5f5f5;opacity: 0.7;">
+	    <div class="ui stackable four column centered grid container">
+		
+			
+			<div class="ui center aligned column">
+			  <div class="ui small red statistic">
+			    <div class="value">
+			      {{price}}$
+			    </div>
+			    <div class="label">
+			      TRX Price
+			    </div>
+			  </div>
+			</div>
+			
+			<div class="ui center aligned column">
+			  <div class="ui small grey statistic">
+			    <div class="value">
+			      {{lastTxCount|numberlocale}}
+			    </div>
+			    <div class="label">
+			    	Transactions <br><small>(last 24h)</small>
+			    </div>
+			  </div>
+			</div>
+			
+			<div class="ui center aligned column">
+			  <div class="ui small orange statistic">
+			    <div class="value">
+			      {{totalAccounts|numberlocale}}
+			    </div>
+			    <div class="label">
+			      Accounts
+			    </div>
+			  </div>
+			</div>
+			
+			<div class="ui center aligned column">
+			  <div class="ui small green statistic">
+			    <div class="value">
+			      {{lastVotesCount|numberlocale}}
+			    </div>
+			    <div class="label">
+			      Votes<br><small>(last 24h)</small>
+			    </div>
+			  </div>
+			</div>
+
+      </div>
+</div>
+<div class="ui vertical stripe segment" >
+    <div class="ui middle aligned stackable grid container">
+      <div class="row">
+
+        <div class="five wide column">
+			<b><i class="ui icon exchange"></i>Latest Transactions</b>
+				<table class="ui striped compact fixed grey table">
+					<thead>
+						<tr>
+							<th class="center aligned">Hash</th>
+							<th class="center aligned">Block</th>
+						</tr>
+					</thead>
+					<tbody>
+						{%for tx in lastTxs%}
+						<tr class="center aligned">
+							<td><a href="/tx/{{tx.hash}}">{{tx.hash}}</a></td>
+							<td><a href="/block/{{tx.block}}">{{tx.block}}</a></td>
+						</tr>
+						{%endfor%}
+					</tbody>
+				</table>
+        </div>
+        <div class="five wide column">
+			<b><i class="ui icon user"></i> Latest Accounts</b>
+				<table class="ui striped compact fixed orange table">
+					<thead>
+						<tr>
+							<th class="center aligned">Address</th>
+							<th class="center aligned">Balance</th>
+						</tr>
+					</thead>
+					<tbody>
+						{%for account in lastestAccounts%}
+						<tr class="center aligned">
+							<td><a href="/address/{{account.address}}">{{account.address}}</a></td>
+							<td>{{account.balanceStr}}</td>
+						</tr>
+						{%endfor%}
+					</tbody>
+				</table>
+        </div>
+        <div class="five wide column">
+			<b><i class="ui icon arrow circle up"></i> Latest Votes</b>
+				<table class="ui striped compact fixed green table">
+					<thead>
+						<tr>
+							<th class="center aligned">Voter</th>
+							<th class="center aligned">Candidate</th>
+							<th class="center aligned">Votes</th>
+						</tr>
+					</thead>
+					<tbody>
+						{%for vote in latestVotes%}
+						<tr class="center aligned">
+							<td><a href="/address/{{vote.from}}">{{vote.from}}</a></td>
+							<td><a href="/address/{{vote.to}}">{{vote.to}}</a></td>
+							<td>{{vote.votes|numberlocale}}</td>
+						</tr>
+						{%endfor%}
+					</tbody>
+				</table>
+        </div>
+      </div>
+    </div>
+ </div>
+
+ 
+{%endblock%}

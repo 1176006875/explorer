@@ -1,0 +1,95 @@
+{% extends "main" %}
+{% block title %}Tron account and address list{% endblock %}
+{%block description%}Check all existing account currently on Tron blockchain{%endblock%}
+
+
+
+{% block content %}
+
+	
+<h1 class="ui dividing header"><small><i class="icon user"></i>Accounts</small></h1>
+	
+<div class="ui vertical stripe segment" style="background: #f5f5f5;opacity: 0.7;">
+
+	
+	    <div class="ui stackable four column centered grid container">
+				<div class="ui center aligned column">
+				
+				  <div class="ui small grey statistic">
+				    <div class="value">
+				      <small>{{stats.totalAccounts|numberlocale}}</small>
+				    </div>
+				    <div class="label">
+				      Total accounts
+				    </div>
+				  </div>
+				  	
+				</div>
+				
+				<div class="ui center aligned column">
+					<div class="ui small green statistic">
+				    <div class="value">
+				      <small>{{stats.totalAccounts24h|numberlocale}}</small>
+				    </div>
+				    <div class="label">
+				    	New accounts
+				    	<small>(last 24h)</small> 
+				    </div>
+				  </div>
+				</div>
+				
+				<div class="ui center aligned column">
+				  <div class="ui small orange statistic">
+				    <div class="text value">
+				      {{stats.totalAccountBalance}} TRX
+				    </div>
+				    <div class="label">
+				      Total Available <a href="#"  data-tooltip="Total of account balances that are currently available (not frozen)" data-position="bottom center"><i class="ui icon circle info"></i></a>
+				    </div>
+				  </div>			
+				</div>
+	   
+				<div class="ui center aligned column">
+				  <div class="ui small blue statistic">
+				    <div class="text value">
+				      {{stats.totalAccountFrozen}} TRX
+				    </div>
+				    <div class="label">
+				      Total Frozen <a href="#"  data-tooltip="Total of account balances that are currently frozen (not available)" data-position="bottom center"><i class="ui icon circle info"></i></a>
+				    </div>
+				  </div>
+	 			</div>
+	      </div>
+      </div>
+
+
+
+
+<table class="ui striped table">
+	<thead>
+		<tr>
+			<th class="center aligned">Address</th>
+			<th class="center aligned">Name</th>
+			<th class="center aligned">TRX Balance</th>
+			<th class="center aligned">Created</th>
+		</tr>
+	</thead>
+	<tbody>
+		{%for account in list.items%}
+		<tr class="center aligned">
+			<td><a href="/address/{{account.address}}">{{account.address}}</a></td>
+			<td>{%if account.name!=null and account.name.length>0%}{{account.name}}{%else%}-{%endif%}</td>
+			<td>{{account.getBalanceStr()}}</td>
+			<td><span class="timestamp">{{account.createTime}}</span></td>
+		</tr>
+		{%endfor%}
+	</tbody>
+ <tfoot>
+    <tr><th colspan="7">
+		{% include 'partials/pagination' %}
+  </tr></tfoot>
+</table>
+
+
+
+{%endblock%}

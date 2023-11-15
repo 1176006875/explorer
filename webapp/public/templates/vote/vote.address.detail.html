@@ -1,0 +1,203 @@
+{% extends "main" %}
+{% block title %}Votes for {%if vrs.name!=null%}{{vrs.name}}{%else%}{{vrs.address}}{%endif%} on round #{{vrs.round}}{% endblock %}
+{%block description%}Detailed list of votes received by {{vrs.address}} on round #{{vrs.round}}{%endblock%}
+
+
+
+{% block content %}
+<div id="app">
+	
+<h1 class="ui dividing header"><small><small>Votes for {%if vrs.name!=null%}{{vrs.name}}{%else%}{{vrs.address}}{%endif%} on round #{{vrs.round}}</small></small></h1>
+	
+<table class="ui compact definition table ">
+	<tbody>
+		<tr>
+			<td>Address</td>
+			<td><a href="/address/{{vrs.address}}">{{vrs.address}}</a></td>
+		</tr>
+		<tr>
+			<td>Name</td>
+			<td>{{vrs.name}}</td>
+		</tr>
+		<tr>
+			<td>Round #</td>
+			<td>{%if vrs.round>1%}<a href="/vote/{{vrs.round-1}}/{{vrs.address}}"><<&nbsp;</a>{%endif%} {{vrs.round}} {%if vrs.round<currentRound.round%}<a href="/vote/{{vrs.round+1}}/{{vrs.address}}">&nbsp;>></a>{%endif%}</td>
+		</tr>
+		<tr>
+			<td>Round cycle</td>
+			<td> <span>Start:</span><small >[[startDate|dateToLocale]]</small> <span>End:</span><small >[[endDate|dateToLocale]]</small></td>
+		</tr>
+		<tr>
+			<td>Position in round</td>
+			<td> {{vrs.position}}</td>
+		</tr>
+		<tr>
+			<td>Total votes</td>
+			<td>[[totalVotes|numberToLocale]]</td>
+		</tr>	
+	</tbody>
+</table>
+	
+	
+
+
+<div >
+     <div class="ui active tiny teal progress" data-value="99" data-total="100" v-show="loading">
+	  <div class="bar">
+	  </div>
+	<div class="label">Loading...</div>
+	</div>
+	<div class="ui icon small info message" v-show="list.totalCount==0">
+	  <div class="content">
+	    <div class="header">
+	      <i class="circle info icon"></i> No votes ...
+	    </div>
+	  </div>
+	</div>
+     <table class="ui fixed striped table" v-show="list.totalCount>0">
+       <thead>
+         <tr>
+            <th class="center aligned">Voter</th>
+            <th class="center aligned">Votes</th>
+			<th class="center aligned">Percentage</th>
+           <th class="center aligned">Timestamp</th>
+         </tr>
+       </thead>
+       <tbody>
+		<template v-for="(vote,index) in list.items" :key="index">
+	         <tr class="center aligned" >
+	           <td><a :href="'/address/'+[[vote.from]]">[[vote.from]]</a></td>
+	           <td>[[vote.votes|numberToLocale]]</td>
+	           <td>[[vote.votes|percentage|numberToLocale]] %</td>
+	           <td>[[vote.timestamp|dateToLocale]]</td>
+	         </tr>         
+		</template>
+       </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="4" v-show="totalPages>1">
+              <div class="ui left floated">
+                  Page [[currentPage]] of [[totalPages]]
+              </div>
+              <div class="ui right floated pagination menu" >
+
+                <a class="icon item"  @click="previousPage" v-show="currentPage && currentPage!=1">
+                  <i class="left chevron icon"></i>
+                </a>
+                <a class="item" :class="{'active':currentPage==page}" v-for="page in pages" @click="goToPage(page)">[[page]]</a>
+                <a class="icon item" @click="nextPage" v-show="currentPage!=totalPages">
+                  <i class="right chevron icon"></i>
+                </a>
+
+              </div>
+            </th>
+          </tr>
+        </tfoot>
+     </table>
+</div>
+
+</div>
+{%endblock%}
+
+{% block footerscripts%}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.2/vue.min.js"></script>
+
+<script>
+new Vue({
+	  el: '#app',
+	  data: function(){
+		  return {
+			  list:[],
+			  startDate:{{vrs.startDate}},
+			  endDate:{{vrs.endDate}},
+			  totalVotes:{{vrs.votes}},
+			  loading:false
+		  }  
+	  },
+	  methods:{
+	      previousPage(){
+	          this.fetch({page:this.currentPage-1})
+	          
+	      },
+	      nextPage(){
+	    	  this.fetch({page:this.currentPage+1})
+	      },
+	      goToPage(page){
+	    	  this.fetch({page:page});
+	      },
+	      fetch(params){
+	    		var ziss = this;
+	    		this.loading = true;
+	    		$.get('{{apiConfig.endpoint}}/vote/{%if vrs.round==currentRound.round%}live{%else%}{{vrs.round}}{%endif%}/{{vrs.address}}',params).success(function(data){
+	    			ziss.list = data;
+	    			ziss.loading = false;
+	    		}).fail(function(xhr,status,err){
+	    			ziss.loading = false;
+	    			console.error(err);
+	    		});
+	      }
+	  },
+	  mounted: function(){
+		  this.fetch({page:1})
+		  console.log(this.$refs)
+	  },
+	  updated: function(){
+		resizeBackground();  
+	  },
+	  computed: {
+	      pages(){
+	    	var pages = [];
+	    	if (!this.list || !this.list.criteria){
+	    		return pages;
+	    	}
+	    	var currentPage = this.list.criteria.page;
+	    	var limit = this.list.criteria.limit;
+	    	var start = currentPage>5 ? currentPage-2 : 1;
+	    	var maxPage = Math.ceil(this.list.totalCount/limit);
+	    	for (var i = start; i < start+5; i++) {
+				
+				if (i>maxPage){
+					break;
+				}
+				
+				pages.push(i);
+
+			}
+	    	return pages;
+	      },
+	      currentPage(){
+	        if (!this.list || !this.list.criteria){
+	          return 
+	        }
+	        return this.list.criteria.page
+	      },
+	      totalPages(){
+	        if (!this.list || !this.list.criteria){
+	          return 
+	        }
+	        return this.list.totalPages
+      		},
+	  },
+	  filters: {
+		    numberToLocale(value) {
+		      return value.toLocaleString('en-US')
+		    },
+		    dateToLocale(value){
+		    	if (value==0){
+		    		return "-";
+		    	}
+            	var utcDate = moment.unix(value).format('YYYY-MM-DDTHH:mm:ss');
+		    	return moment.utc(utcDate).local().format('DD-MM-YYYY HH:mm:ss');
+		    },
+		    percentage(value){
+		    	return new Number((value/{{vrs.votes}})*100).toFixed(6);
+		    }
+	  },
+	  delimiters : ['[[',']]']
+});
+
+
+</script>
+
+
+{%endblock%}

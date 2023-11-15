@@ -1,0 +1,65 @@
+{% extends "main" %}
+{% block title %}Tron transaction informations: {{tx.hash}}{% endblock %}
+{%block description%}Get all informations about transaction {{tx.hash}} on Tron blockchain{%endblock%}
+
+
+{% block content %}
+
+	
+<h1 class="ui dividing header"><small>Transaction</small></h1>
+	
+
+<table class="ui definition table">
+	<tbody>
+		<tr>
+			<td>Hash</td>
+			<td>{{tx.hash}}</td>
+		</tr>
+		<tr>
+			<td>Block</td>
+			<td><a href="/block/{{tx.block}}">{{tx.block}}</a></td>
+		</tr>
+		<tr>
+			<td>Type</td>
+			<td>{{tx.type}}</td>
+		</tr>
+		<tr>
+			<td>Timestamp</td>
+			<td><span class="timestamp">{{tx.timestamp}}</span></td>
+		</tr>
+		<tr>
+			<td>Status</td>
+			<td>{%if tx.confirmed==true%}<span class="ui small green label">Confirmed</span>{%else%}<a class="ui small red label">Unconfirmed</a>{%endif%}</td>
+		</tr>
+		<tr>
+			<td>From</td>
+			<td><a href="/address/{{tx.from}}">{{tx.from}}</a></td>
+		</tr>
+		{%if tx.type=='VOTEWITNESSCONTRACT'%}
+		<tr>
+			<td>Votes</td>
+			<td>
+				<ul>
+				{%for vote in tx.contract%}
+					<li> <b>{{vote.votes|numberlocale}}</b> votes for <a href="/address/{{vote.to}}">{{vote.to}}</a></li>
+				{%endfor%}
+				</ul>
+			</td>
+		</tr>
+		{%endif%}
+		{%if tx.type=='TRANSFERCONTRACT' or tx.type=='TRANSFERASSETCONTRACT'%}
+		<tr>
+			<td>To</td>
+			<td><a href="/address/{{tx.contract.to}}">{{tx.contract.to}}</a></td>
+		</tr>
+		<tr>
+			<td>Amount</td>
+			<td>{%if tx.contract.token==null %}{{tx.contract.amount|suntrx}}{%else%}{{tx.contract.amount}}{%endif%} {%if tx.contract.token!=null %}{{tx.contract.token}}{%else%}TRX{%endif%}</td>
+		</tr>
+		{%endif%}
+	</tbody>
+</table>
+
+<!-- <h2 class="ui dividing header"><small><i class="icon comments outline"></i>Comments</small></h2> -->
+
+{%endblock%}

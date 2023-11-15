@@ -1,0 +1,212 @@
+{% extends "main" %}
+{% block title %}Tron vote round #{{vr.round}} informations{% endblock %}
+{%block description%}Get all informations about reprensentatives for vote round {{vr.round}}{%endblock%}
+
+
+
+{% block content %}
+
+	
+<h1 class="ui dividing header"><small>Vote round #{{vr.round}}</small></h1>
+	
+
+<table class="ui definition table">
+	<tbody>
+		<tr>
+			<td>Round</td>
+			<td>{%if vr.round>1%}<a href="/vote/{{vr.round-1}}"><<</a>{%endif%} {{vr.round}} {%if vr.round<currentRound.round%}<a href="/vote/{{vr.round+1}}">>></a>{%endif%}</td>
+		</tr>
+		<tr>
+			<td>Start date</td>
+			<td><span class="timestamp">{{vr.startDate}}</span></td>
+		</tr>
+		<tr>
+			<td>End date</td>
+			<td><span class="timestamp">{{vr.endDate}}</span></td>
+		</tr>
+		<tr>
+			<td>Total votes</td>
+			<td>{{vr.voteCountStr}}</td>
+		</tr>	
+	</tbody>
+</table>
+
+
+<div id="app">
+	<div class="ui active tiny teal progress" data-value="99" data-total="100" v-show="loading">
+	  <div class="bar">
+	  </div>
+	<div class="label">Loading...</div>
+	</div>
+<div class="ui icon small info message" v-show="list.totalCount==0">
+  <div class="content">
+    <div class="header">
+      <i class="circle info icon"></i> No votes ...
+    </div>
+  </div>
+</div>
+     <table class="ui fixed striped table" v-show="list.totalCount>0">
+       <thead>
+         <tr>
+           <th class="center aligned">Rank</th>
+           <th class="center aligned">Candidate</th>
+           <th class="center aligned">Votes</th>
+           <th class="center aligned">Percentage</th>
+         </tr>
+       </thead>
+		<thead>
+			<tr v-if="currentPage==1">
+				<th class="center aligned" colspan="4">Super representatives</th>
+			</tr>
+		</thead>
+       <tbody>
+		<template v-for="(vr,index) in list.items" :key="index">
+	         <tr v-if="vr.position==28">
+				<td class="center aligned" colspan="4" ><b>SR Candidates</b></b></td>
+			 </tr>
+	         <tr class="center aligned" >
+	           <td><span class="ui olivecircular label">[[vr.position]]</span> &nbsp;&nbsp;&nbsp;<small v-if="vr.positionChange>0" style="color:green;">+[[vr.positionChange]]</small><small v-if="vr.positionChange<0" style="color:red;">[[vr.positionChange]]</small><small v-if="vr.positionChange==0" >-</small></td>
+	           <td>
+					<table class="ui very basic table">
+						<tr >
+							<td>
+								<canvas class="jdenticon" width="40" height="40" :data-jdenticon-value="[[vr.address]]"></canvas></a>
+							</td>
+							<td >
+								<a :href="'/address/'+[[vr.address]]" style="color:rgb(101, 94, 94);font-size: 16px;font-weight: bold;"><span v-if="vr.name">[[vr.name]]</span><span v-if="!vr.name">[[vr.url]]</span></a>
+							</td>
+						</tr>						
+					</table>
+	           	
+	           </td>
+	           <td><a :href="'/vote/{{vr.round}}/'+[[vr.address]]">[[vr.votes|toLocale]]</a> <br><small v-if="vr.votesChange>0" style="color:green;">+[[vr.votesChange|toLocale]]</small><small v-if="vr.votesChange<0" style="color:red;">[[vr.votesChange|toLocale]]</small><small v-if="vr.votesChange==0" >-</small></td>
+	           <td><span v-if="isGr(vr)">[[vr.votes|percentage|toLocale]] %</span><span v-if="!isGr(vr)">-</span></td>
+	         </tr>         
+		</template>
+       </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="4" v-show="totalPages>1">
+              <div class="ui left floated">
+                  Page [[currentPage]] of [[totalPages]]
+              </div>
+              <div class="ui right floated pagination menu" >
+
+                <a class="icon item"  @click="previousPage" v-show="currentPage && currentPage!=1">
+                  <i class="left chevron icon"></i>
+                </a>
+                <a class="item" :class="{'active':currentPage==page}" v-for="page in pages" @click="goToPage(page)">[[page]]</a>
+                <a class="icon item" @click="nextPage" v-show="currentPage!=totalPages">
+                  <i class="right chevron icon"></i>
+                </a>
+
+              </div>
+            </th>
+          </tr>
+        </tfoot>
+     </table>
+</div>
+
+{%endblock%}
+
+{% block footerscripts%}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.2/vue.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jdenticon@2.1.0"></script>
+
+<script>
+new Vue({
+	  el: '#app',
+	  data: function(){
+		  return {
+			  list:[],
+			  loading:false
+		  }  
+	  },
+	  methods:{
+		  isGr(vr){
+			  return vr.url.lastIndexOf('http://TronGr',0)!=0;
+		  },
+		  getVoteChange(value){
+			  return ((value.votes + value.votesChange)/value.votes);
+		  },
+	      previousPage(){
+	          this.fetch({page:this.currentPage-1})
+	          
+	      },
+	      nextPage(){
+	    	  this.fetch({page:this.currentPage+1})
+	      },
+	      goToPage(page){
+	    	  this.fetch({page:page});
+	      },
+	      fetch(params){
+	    		var ziss = this;
+	    		this.loading = true;
+	    		$.get('{{apiConfig.endpoint}}/vote/{{vr.round}}',params).success(function(data){
+	    			ziss.list = data;
+	    			ziss.loading=false;
+	    			//fixme
+	    			resizeBackground();
+	    			$.getScript( "https://cdn.jsdelivr.net/npm/jdenticon@2.1.0" )
+	    		}).fail(function(xhr,status,err){
+	    			console.error(err);
+	    			ziss.loading=false;
+	    		});
+	      }
+	  },
+	  mounted: function(){
+		  this.fetch({page:1})
+	  },
+	  updated: function(){
+		  resizeBackground();  
+	  },
+	  computed: {
+	      pages(){
+	    	var pages = [];
+	    	if (!this.list || !this.list.criteria){
+	    		return pages;
+	    	}
+	    	var currentPage = this.list.criteria.page;
+	    	var limit = this.list.criteria.limit;
+	    	var start = currentPage>5 ? currentPage-2 : 1;
+	    	var maxPage = Math.ceil(this.list.totalCount/limit);
+	    	for (var i = start; i < start+5; i++) {
+				
+				if (i>maxPage){
+					break;
+				}
+				
+				pages.push(i);
+
+			}
+	    	return pages;
+	      },
+	      currentPage(){
+	        if (!this.list || !this.list.criteria){
+	          return 
+	        }
+	        return this.list.criteria.page
+	      },
+	      totalPages(){
+	        if (!this.list || !this.list.criteria){
+	          return 
+	        }
+	        return this.list.totalPages
+      		},
+	  },
+	  filters: {
+		    toLocale(value) {
+		      return value.toLocaleString('en-US')
+		    },
+		    percentage(value){
+		    	return new Number((value/{{vr.voteCount}})*100).toFixed(6);
+		    }
+	  },
+	  delimiters : ['[[',']]']
+});
+
+
+</script>
+
+
+{%endblock%}

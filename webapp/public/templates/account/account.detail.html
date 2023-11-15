@@ -1,0 +1,899 @@
+{% extends "main" %} 
+{% block title %}Tron address {%if account.name!=null and account.name.length>0%}({{account.name}}){%endif%} {{account.address}} informations {% endblock %} 
+{%block description%}Get all informations about address #{{account.address}} on Tron blockchain{%endblock%}
+ 
+{% block header %} 
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/taucharts@1/build/production/tauCharts.min.css">
+
+{% endblock %}
+ 
+{% block content %}
+<h1 class="ui dividing header">
+	<small><i class="icon user"></i> Address</small>
+</h1>
+{%if account.witness!=null%}
+<div class="ui orange inverted segment align center" style="opacity: 0.7;"><b>REPRESENTATIVE ACCOUNT</b></div>
+{%endif%}
+<div class="ui vertical stripe segment" style="background: #f5f5f5;opacity: 0.7;">
+    <div class="ui grid ">
+   			<div class="column">
+   			
+	   			<table>
+	   				<tr>
+	   					<td>
+	   					<canvas width="40" height="40" data-jdenticon-value="{{account.address}}"></canvas>
+	   					</td>
+	   					<td>
+	   					<h2 class="ui header nomobile">{{account.address}} {%if account.name!=null and account.name!='' %}<small><small>({{account.name}})</small></small>{%endif%}</h2>
+	   					<b class="mobile-only">{{account.address}} {%if account.name!=null and account.name!='' %}<small><small>({{account.name}})</small></small>{%endif%}</b>
+	   					</td>
+	   				</tr>
+	   			</table>
+						 
+					
+					
+					<div class="ui fluid grid">
+					
+								<div class="one wide column"></div>
+			
+								<div class="eleven wide column">
+									
+									<div class="ui stackable three column centered grid container">
+										
+										<div class="ui aligned column">											
+											<div style="margin-bottom: 0;"  class="ui mini red statistic">
+											  <div class="value">
+											    {{account.getBalanceStr()}} TRX
+											  </div>
+											  <div class="label">
+											    Balance
+											  </div>
+											</div>
+										</div>
+										<div class="ui center aligned column">	
+											<div style="margin-bottom: 0;"  class="ui mini orange statistic">
+											  <div class="value">
+											    {{account.getFrozenBalanceStr()}}
+											  </div>
+											  <div class="label">
+											    Tron power
+											  </div>
+											</div>
+										</div>
+										{%if account.usdValue!=null%}
+										<div class="ui center aligned column">	
+										<div style="margin-bottom: 0;"  class="ui mini green statistic">
+										  <div class="value">
+										    {{account.usdValue}}$
+										  </div>
+										  <div class="label">
+										    USD VALUE
+										  </div>
+										</div>
+										</div>
+										{%endif%}
+									</div>		
+					
+								</div>
+							<!-- 
+								<div class="four wide column">
+									<div class="ui mini green button">Send</div>
+									{%if account.witness!=null%}
+									<div class="ui mini blue button">Vote</div>
+									{%endif%}
+									<div class="ui mini yellow button">Receive</div>
+								</div>
+ 							-->								
+					</div>
+			</div>
+    </div>
+</div>
+
+<div class="ui segment">
+	<div class="ui stackable grid">
+		<div class="ten wide column">
+			<table class="ui compact very basic table ">
+				<tbody>
+				<tr>
+						<td>Creation date</td>
+						<td><span class="timestamp">{{account.createTime}}</span></td>
+					</tr>
+					<!-- 
+					<tr>
+						<td>Bandwidth</td>
+						<td>{{account.getBandwidthStr()}}</td>
+					</tr>
+					 -->
+					<tr >
+						<td>TRX balance</td>
+						<td>
+							{%if account.frozenBalance >0%}
+							<table class="ui very basic table ">
+								<tbody>
+									<tr>
+										<td>Available</td>
+										<td>{{account.getBalanceStr()}}</td>
+									</tr>
+									<tr>
+										<td>Frozen</td>
+										<td>{{account.getFrozenBalanceStr()}} &nbsp;&nbsp; <small>(Expires: <span class="timestamp">{{account.frozenExpire}}</span>)</small></td>
+									</tr>
+									<tr>
+										<td>Total</td>
+										<td>{{account.getTotalBalanceStr()}}</td>
+									</tr>
+								</tbody>
+							</table>
+							{%else%}
+								{{account.getBalanceStr()}}
+							{%endif%}
+						</td>
+					</tr>
+					<tr>
+						<td>Transfers</td>
+						<td>Incoming : {{account.transferToCount}} - Outgoing: {{account.transferFromCount}}</td>
+					</tr>
+					<tr>
+						<td>Total Tokens</td>
+						<td>{{account.tokensCount}}</td>
+					</tr>
+					<tr>
+						<td>Tokens participations</td>
+						<td>{{account.participationsCount}}</td>
+					</tr>
+{%if account.witness!=null%}			
+					<tr>
+						<td>URL</td>
+						<td><a href="{{account.witness.url}}" target="blank">{{account.witness.url}}</a></td>
+					</tr>
+					<tr>
+						<td>Votes received </td>
+						<td>Last round: {{account.witness.getVoteCountStr()}} - Live: {{account.witness.liveVotes|numberlocale}}</td>
+					</tr>
+					<tr>
+						<td>Blocks</td>
+						<td>{{account.witness.totalProduced}} produced - {{account.witness.totalMissed}} missed</td>
+					</tr>
+					<tr>
+						<td>Allowance</td>
+						<td>{{account.getAllowanceStr()}} TRX</td>
+					</tr>
+					<!-- 
+				<tr>
+					<td>Total reward</td>
+					<td>{{account.totalReward}}</td>
+				</tr>
+				 !-->
+{%endif%}	
+			
+				</tbody>
+			</table>
+			{%if account.witness!=null%}	
+			<b>Previous round performance</b>
+			<div class="ui active dimmer"> <div class="ui text loader">Loading ...</div></div>
+			<div id="chart" style="height:300px;"></div>
+			{%endif%}
+		</div>
+		<div class="six wide column">
+			<div id="currentVotesContainer" style="display:none;">
+			<b>Current votes repartition</b>
+			
+			<div id="currentVotes" style="height:300px;"></div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+ 
+
+ 
+ 
+<div id="app">
+
+<div class="ui stackable fluid secondary menu">
+  <router-link to="/" active-class="active" class="item" exact> Transfers In &nbsp;<div class="ui label">{{account.transferToCount}}</div></router-link>
+  <router-link to="/transfersOut" active-class="active" class="item" exact> Transfers Out <div class="ui label">&nbsp;{{account.transferFromCount}}</div></router-link>
+  <router-link to="/tokens" active-class="active" class="item" exact>Tokens &nbsp;<div class="ui label">{{account.tokensCount}}</div></router-link>
+  <router-link to="/tp" active-class="active" class="item" exact>Token participations &nbsp;<div class="ui label">{{account.participationsCount}}</div></router-link>
+  <router-link to="/votes" active-class="active" class="item" exact>Votes repartition</router-link>
+  <!-- <router-link to="/freeze" active-class="active" class="item">Freeze history</router-link> -->
+  {%if account.witness!=null%}
+  <router-link to="/voters" active-class="active" class="item" exact>Voters</router-link>
+  <router-link to="/aw" active-class="active" class="item" exact>Witdhdrawal</router-link>
+
+  {%endif%}
+</div>
+
+ <router-view></router-view>
+ 
+</div>
+
+
+
+
+<!-- TRANSFERS IN-->
+ <script type="text/x-template"  id="transfersIn">
+   <div v-cloak>
+
+<div class="ui active tiny teal progress" data-value="99" data-total="100" v-show="loading">
+  <div class="bar">
+  </div>
+<div class="label">Loading...</div>
+</div>
+
+<div class="ui icon small info message" v-show="list.totalCount==0">
+  <div class="content">
+    <div class="header">
+      <i class="circle info icon"></i> No transfers in yet for this account
+    </div>
+  </div>
+</div>
+
+     <table class="ui fixed striped table"  v-show="list.totalCount>0">
+       <thead>
+         <tr>
+           <th class="center aligned">Tx id</th>
+           <th class="center aligned">Timestamp</th>
+           <th class="center aligned">From</th>
+           <th class="center aligned">To</th>
+           <th class="center aligned">Amount</th>
+         </tr>
+       </thead>
+       <tbody>
+		<template v-for="(tx,index) in list.items" :key="index">
+	         <tr class="center aligned" >
+	           <td><a :href="'/tx/'+tx.hash">[[tx.hash]]</a></td>
+	           <td>[[tx.timestamp|dateToLocale]]</td>
+	           <td><a :href="'/address/'+tx.from" v-if="tx.from!=address">[[tx.from]]</a><span v-if="tx.from==address">[[tx.from]]</span></td>
+	           <td><a :href="'/address/'+tx.to" v-if="tx.to!=address">[[tx.to]]</a><span v-if="tx.to==address">[[tx.to]]</span></td>
+	           <td><span v-if="tx.token">[[tx.amount|toLocale]] [[tx.token]]</span><span v-if="!tx.token">[[tx.amount|sunTrx|toLocale]]  TRX</span></td>
+	         </tr>         
+		</template>
+       </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="5" v-show="totalPages>1">
+				{% include 'account/jspartial/pagination' %}
+            </th>
+          </tr>
+        </tfoot>
+     </table>
+  </div>
+</script>
+<!-- TRANSFERS OUT-->
+ <script type="text/x-template"  id="transfersOut">
+   <div v-cloak>
+
+<div class="ui active tiny teal progress" data-value="99" data-total="100" v-show="loading">
+  <div class="bar">
+  </div>
+<div class="label">Loading...</div>
+</div>
+
+<div class="ui icon small info message" v-show="list.totalCount==0">
+  <div class="content">
+    <div class="header">
+      <i class="circle info icon"></i> No transfers out yet for this account
+    </div>
+  </div>
+</div>
+
+     <table class="ui fixed striped table"  v-show="list.totalCount>0">
+       <thead>
+         <tr>
+           <th class="center aligned">Tx id</th>
+           <th class="center aligned">Timestamp</th>
+           <th class="center aligned">From</th>
+           <th class="center aligned">To</th>
+           <th class="center aligned">Amount</th>
+         </tr>
+       </thead>
+       <tbody>
+		<template v-for="(tx,index) in list.items" :key="index">
+	         <tr class="center aligned" >
+	           <td><a :href="'/tx/'+tx.hash">[[tx.hash]]</a></td>
+	           <td>[[tx.timestamp|dateToLocale]]</td>
+	           <td><a :href="'/address/'+tx.from" v-if="tx.from!=address">[[tx.from]]</a><span v-if="tx.from==address">[[tx.from]]</span></td>
+	           <td><a :href="'/address/'+tx.to" v-if="tx.to!=address">[[tx.to]]</a><span v-if="tx.to==address">[[tx.to]]</span></td>
+	           <td><span v-if="tx.token">[[tx.amount|toLocale]] [[tx.token]]</span><span v-if="!tx.token">[[tx.amount|sunTrx|toLocale]]  TRX</span></td>
+	         </tr>         
+		</template>
+       </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="5" v-show="totalPages>1">
+				{% include 'account/jspartial/pagination' %}
+            </th>
+          </tr>
+        </tfoot>
+     </table>
+  </div>
+</script>
+<!-- TOKEN BALANCE -->
+ <script type="text/x-template"  id="tokens">
+ <div v-cloak>
+<div class="ui active tiny teal progress" data-value="99" data-total="100" v-show="loading">
+  <div class="bar">
+  </div>
+<div class="label">Loading...</div>
+</div>
+<div class="ui icon small info message" v-show="list.totalCount==0">
+  <div class="content">
+    <div class="header">
+      <i class="circle info icon"></i> No tokens yet for this account
+    </div>
+  </div>
+</div>
+     <table class="ui fixed striped table" v-show="list.totalCount>0">
+       <thead>
+         <tr>
+           <th class="center aligned">Token</th>
+           <th class="center aligned">Balance</th>
+         </tr>
+       </thead>
+       <tbody>
+		<template v-for="(token,index) in list.items" :key="index">
+	         <tr class="center aligned" >
+	           <td><a :href="'/token/'+token.assetName">[[token.assetName]]</a></td>
+	           <td>[[token.balance|toLocale]]</td>
+	         </tr>         
+		</template>
+       </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="2" v-show="totalPages>1">
+				{% include 'account/jspartial/pagination' %}
+            </th>
+          </tr>
+        </tfoot>
+     </table>
+</div>
+</script>
+<!-- TOKEN PARTICIPATION -->
+ <script type="text/x-template"  id="tp">
+<div v-cloak>
+<div class="ui active tiny teal progress" data-value="99" data-total="100" v-show="loading">
+  <div class="bar">
+  </div>
+<div class="label">Loading...</div>
+</div>
+<div class="ui icon small info message" v-show="list.totalCount==0">
+  <div class="content">
+    <div class="header">
+      <i class="circle info icon"></i> No token participations yet for this account
+    </div>
+  </div>
+</div>
+     <table class="ui fixed striped table" v-show="list.totalCount>0">
+       <thead>
+         <tr>
+			<th class="center aligned">Token</th>
+			<th class="center aligned">From</th>
+			<th class="center aligned">To</th>
+			<th class="center aligned">Amount</th>
+			<th class="center aligned">Timestamp</th>
+         </tr>
+       </thead>
+       <tbody>
+		<template v-for="(tp,index) in list.items" :key="index">
+	         <tr class="center aligned" >
+				<td><a :href="'/token/'+tp.token">[[tp.token]]</a></td>
+	           <td><a :href="'/address/'+tp.from" v-if="tp.from!=address">[[tp.from]]</a><span v-if="tp.from==address">[[tp.from]]</span></td>
+	           <td><a :href="'/address/'+tp.to" v-if="tp.to!=address">[[tp.to]]</a><span v-if="tp.to==address">[[tp.to]]</span></td>
+	           <td>[[tp.amount|sunTrx|toLocale]] TRX</span></td>
+				<td>[[tp.timestamp|dateToLocale]]</td>
+	         </tr>         
+		</template>
+       </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="5" v-show="totalPages>1">
+				{% include 'account/jspartial/pagination' %}
+            </th>
+          </tr>
+        </tfoot>
+     </table>
+</div>
+</script>
+<!-- VOTES -->
+ <script type="text/x-template"  id="votes">
+<div v-cloak>
+<div class="ui active tiny teal progress" data-value="99" data-total="100" v-show="loading">
+  <div class="bar">
+  </div>
+<div class="label">Loading...</div>
+</div>
+<div class="ui icon small info message" v-show="list.totalCount==0">
+  <div class="content">
+    <div class="header">
+      <i class="circle info icon"></i> No votes sent yet from this account
+    </div>
+  </div>
+</div>
+     <table class="ui fixed striped table" v-show="list.totalCount>0">
+       <thead>
+         <tr>
+			<th class="center aligned">Round</th>
+			<th class="center aligned">Candidate</th>
+			<th class="center aligned">Votes</th>
+			<th class="center aligned">Round percentage</th>
+			<th class="center aligned">Total Round Votes</th>
+			<th class="center aligned">Timestamp</th>
+         </tr>
+       </thead>
+       <tbody>
+		<template v-for="(vote,index) in list.items" :key="index">
+	         <tr class="center aligned" >
+				<td><a :href="'/vote/'+vote.round">[[vote.round]]</a></td>
+				<td><a :href="'/address/'+vote.to">[[vote.to]]</a></td>
+				<td>[[vote.votes|toLocale]]</td>
+				<td>[[getVotesPercentage(vote)]] %</td>
+				<td>[[vote.totalRoundVotes|toLocale]]</td>
+				<td>[[vote.timestamp|dateToLocale]]</td>
+	         </tr>         
+		</template>
+       </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="6" v-show="totalPages>1">
+				{% include 'account/jspartial/pagination' %}
+            </th>
+          </tr>
+        </tfoot>
+     </table>
+</div>
+</script>
+<!-- VOTERS -->
+ <script type="text/x-template"  id="voters">
+<div v-cloak>
+<div class="ui active tiny teal progress" data-value="99" data-total="100" v-show="loading">
+  <div class="bar">
+  </div>
+<div class="label">Loading...</div>
+</div>
+<div class="ui icon small info message" v-show="list.totalCount==0">
+  <div class="content">
+    <div class="header">
+      <i class="circle info icon"></i> No voters yet from this account
+    </div>
+  </div>
+</div>
+     <table class="ui fixed striped table" v-show="list.totalCount>0">
+       <thead>
+         <tr>
+			<th class="center aligned">Voter</th>
+			<th class="center aligned">Votes</th>
+			<th class="center aligned">Percentage</th>
+         </tr>
+       </thead>
+       <tbody>
+		<template v-for="(vote,index) in list.items" :key="index">
+	         <tr class="center aligned" >
+				<td><a :href="'/address/'+vote.from">[[vote.from]]</a></td>
+				<td>[[vote.votes|toLocale]]</td>
+				<td>[[getVotesPercentage(vote)]]%</td>				
+	         </tr>         
+		</template>
+       </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="3" v-show="totalPages>1">
+				{% include 'account/jspartial/pagination' %}
+            </th>
+          </tr>
+        </tfoot>
+     </table>
+</div>
+</script>
+
+<!-- FREEZE -->
+ <script type="text/x-template"  id="freeze">
+     <table class="ui fixed striped table" v-cloak>
+       <thead>
+		<tr>
+			<th class="center aligned">Frozen Balance</th>
+			<th class="center aligned">Freeze expiration date</th>
+			<th class="center aligned">Unfreeze date</th>
+		</tr>
+       </thead>
+       <tbody>
+		<template v-for="(freeze,index) in list.items" :key="index">
+	         <tr class="center aligned" >
+				<td>[[freeze.balance|sunTrx|toLocale]]</td>
+				<td>[[freeze.expireTime]]</td>
+				<td>[[freeze.unfreezeTime]]</td>
+	         </tr>         
+		</template>
+       </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="5" v-show="totalPages>1">
+				{% include 'account/jspartial/pagination' %}
+            </th>
+          </tr>
+        </tfoot>
+     </table>
+</script>
+<!-- WIDTHDRAWALS -->
+ <script type="text/x-template"  id="widthdrawals">
+<div v-cloak>
+<div class="ui active tiny teal progress" data-value="99" data-total="100" v-show="loading">
+  <div class="bar">
+  </div>
+<div class="label">Loading...</div>
+</div>
+<div class="ui icon small info message" v-show="list.totalCount==0">
+  <div class="content">
+    <div class="header">
+      <i class="circle info icon"></i> No withdrawal yet for this account
+    </div>
+  </div>
+</div>
+     <table class="ui fixed striped table" v-show="list.totalCount>0">
+       <thead>
+		<tr>
+			<th class="center aligned">Tx Id</th>
+			<th class="center aligned">Timestamp</th>
+		</tr>
+       </thead>
+       <tbody>
+		<template v-for="(aw,index) in list.items" :key="index">
+	         <tr class="center aligned" >
+				<td><a :href="'/tx/'+aw.tx">[[aw.tx]]</a></td>
+				<td>[[aw.timestamp]]</td>
+	         </tr>         
+		</template>
+       </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="2" v-show="totalPages>1">
+				{% include 'account/jspartial/pagination' %}
+            </th>
+          </tr>
+        </tfoot>
+     </table>
+</div>
+</script>
+
+
+
+{%endblock%}
+
+{% block footerscripts%}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/components/progress.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.2/vue.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.2.0/vue-router.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jdenticon@2.1.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/davidshimjs-qrcodejs@0.0.2/qrcode.min.js"></script>
+<script src="//cdn.jsdelivr.net/d3js/3.5.17/d3.min.js" charset="utf-8"></script>
+<script src="//cdn.jsdelivr.net/npm/taucharts@1/build/production/tauCharts.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+
+<script>
+var common = {
+		  data: function(){
+			  return {
+				  list:[],
+				  address:'{{account.address}}',
+				  loading:false
+			  }  
+		  },
+		  methods:{
+		      previousPage(){
+		    	  var params = this.getParams();
+		    	  params.page = this.currentPage-1; 
+		    	  this.fetch(params);
+		      },
+		      nextPage(){
+		    	  var params = this.getParams();
+		    	  params.page = this.currentPage+1;
+		    	  this.fetch(params);
+		      },
+		      goToPage(page){
+		    	  var params = this.getParams();
+		    	  params.page = page;
+		    	  this.fetch(params);
+		      },
+		      fetch(params){
+		    		var ziss = this;
+		    		this.loading = true;
+		    		$.get(this.endpoint,params).success(function(data){
+		    			ziss.list = data;
+		    			ziss.loading=false;
+		    		}).fail(function(xhr,status,err){
+		    			ziss.loading=false;
+		    			console.error(err);
+		    		});
+		      },
+			  getParams(){
+				  return {address:this.address}
+			  }
+		  },
+		  updated: function(){
+  			resizeBackground();  
+		  },
+		  mounted: function(){
+			  this.fetch(this.getParams());
+		  },
+		  computed: {
+		      pages(){
+		    	var pages = [];
+		    	if (!this.list || !this.list.criteria){
+		    		return pages;
+		    	}
+		    	var currentPage = this.list.criteria.page;
+		    	var limit = this.list.criteria.limit;
+		    	var start = currentPage>5 ? currentPage-2 : 1;
+		    	var maxPage = Math.ceil(this.list.totalCount/limit);
+		    	for (var i = start; i < start+5; i++) {
+					
+					if (i>maxPage){
+						break;
+					}
+					
+					pages.push(i);
+
+				}
+		    	return pages;
+		      },
+		      currentPage(){
+		        if (!this.list || !this.list.criteria){
+		          return 
+		        }
+		        return this.list.criteria.page
+		      },
+		      totalPages(){
+		        if (!this.list || !this.list.criteria){
+		          return 
+		        }
+		        return this.list.totalPages
+	      		},
+		  },
+		  filters: {
+			    toLocale(value) {
+			      return value.toLocaleString('en-US')
+			    },
+			    sunTrx(value){
+			      return value/1000000;
+			    },
+			    dateToLocale(value){
+			    	if (value==0){
+			    		return "-";
+			    	}
+	            	var utcDate = moment.unix(value).format('YYYY-MM-DDTHH:mm:ss');
+			    	return moment.utc(utcDate).local().format('DD-MM-YYYY HH:mm:ss');
+			    }
+		  },
+		  delimiters : ['[[',']]']
+}
+
+
+
+var TransfersIn = Vue.component('transfersIn',{
+	  template: '#transfersIn',
+	  mixins:[common],
+	  data: function(){
+		  return {
+			endpoint:'{{apiConfig.endpoint}}/account/transfersIn'
+		  }  
+	  }
+});
+var TransfersOut = Vue.component('transfersOut',{
+	  template: '#transfersOut',
+	  mixins:[common],
+	  data: function(){
+		  return {
+			endpoint:'{{apiConfig.endpoint}}/account/transfersOut'
+		  }  
+	  }
+});
+var Tokens = Vue.component('tokens',{
+	  template: '#tokens',
+	  mixins:[common],
+	  data: function(){
+		  return {
+			endpoint:'{{apiConfig.endpoint}}/account/tokens'
+		  }  
+	  }
+});
+var TP = Vue.component('tp',{
+	  template: '#tp',
+	  mixins:[common],
+	  data: function(){
+		  return {
+			endpoint:'{{apiConfig.endpoint}}/account/tokenParticipations'
+		  }  
+	  }
+});
+var Votes = Vue.component('votes',{
+	  template: '#votes',
+	  mixins:[common],
+	  data: function(){
+		  return {
+			endpoint:'{{apiConfig.endpoint}}/account/votes'
+		  }  
+	  },
+	  methods:{
+		  getVotesPercentage: function(vote){
+			  return new Number((vote.votes/vote.totalRoundVotes)*100).toFixed(6)
+		  }
+	  }
+});
+
+var Voters = Vue.component('voters',{
+	  template: '#voters',
+	  mixins:[common],
+	  data: function(){
+		  return {
+			endpoint:'{{apiConfig.endpoint}}/account/voters'
+		  }  
+	  },
+	  methods:{
+	 {%if account.witness!=null%}
+		  getVotesPercentage: function(vote){
+			  return new Number((vote.votes/{{account.witness.liveVotes}})*100).toFixed(6)
+		  }
+	  {%endif%}
+	  }
+});
+
+var Withdrawal = Vue.component('widthdrawal',{
+	  template: '#widthdrawals',
+	  mixins:[common],
+	  data: function(){
+		  return {
+			endpoint:'{{apiConfig.endpoint}}/account/withdrawal'
+		  }  
+	  }
+});
+/*
+var Freeze = Vue.component('freeze',{
+	  template: '#freeze',
+	  mixins:[common],
+	  data: function(){
+		  return {
+			endpoint:'{{apiConfig.endpoint}}/account/freeze'
+		  }  
+	  }
+});
+*/
+var routes = [
+	  { path: '/', component: TransfersIn },
+	  { path: '/transfersOut', component: TransfersOut },
+	  { path: '/tokens', component: Tokens },
+	  { path: '/tp', component: TP },
+	  { path: '/votes', component: Votes },
+	  { path: '/voters', component: Voters },
+	  { path: '/aw', component: Withdrawal },
+	  /*{ path: '/freeze', component: Freeze },*/
+	]
+var router = new VueRouter({
+	  routes:routes
+	})
+new Vue({
+	  router:router
+}).$mount('#app');
+
+$('.progress').progress('set', 100);
+{%if account.witness!=null%}
+$.get('{{apiConfig.endpoint}}/vote/stats/{{currentRound.round}}',{address:"{{account.address}}"}).success(function(data){
+
+	  var chart = new tauCharts.Chart({
+		    data: data.items,
+		    type: 'line',
+		    guide:{
+		    	
+		    	    x:{
+	    		    	label:'Round',
+	    		    	autoScale:false
+	    		    },
+	    		    y:{
+	    		    	label:'Votes',
+	    		    	autoScale:false
+	    		    }
+		    },
+		    x:'round',
+		    y: 'votes',
+		    color: 'name',
+		    size:null,
+		    plugins:
+		    	[
+		    		tauCharts.api.plugins.get('tooltip')({
+		    			fields: ['position','round','votes','startDate','endDate'],
+		    			formatters: {
+		                    startDate: function (value) {
+		                    	var utcDate = moment.unix(value).format('YYYY-MM-DDTHH:mm:ss');
+		        		    	return moment.utc(utcDate).local().format('DD-MM-YYYY HH:mm:ss');
+		                    },
+		                    endDate: function (value) {
+		                    	var utcDate = moment.unix(value).format('YYYY-MM-DDTHH:mm:ss');
+		        		    	return moment.utc(utcDate).local().format('DD-MM-YYYY HH:mm:ss');
+		                    }
+		                }
+		    			
+		    		}),
+		    	]
+		});
+	
+	  chart.renderTo('#chart');
+	  $('.ui.dimmer').toggleClass('active'); 
+		resizeBackground();
+	
+}).fail(function(xhr,status,err){
+	console.error(err);
+	  $('.ui.dimmer').toggleClass('active');
+});
+
+
+{%endif%}
+
+$.get('{{apiConfig.endpoint}}/account/liveVotes',{address:"{{account.address}}"}).success(function(data){
+	
+	if (data.items.length==0){
+		return;
+	}
+	
+	$('#currentVotesContainer').show();
+	var chart = new tauCharts.Chart({
+	    type: 'horizontal-bar',
+	    guide:{
+	    	
+    	    x:{
+		    	label:'Votes',
+		    	autoScale:true
+		    },
+		    y:{
+		    	label:'Candidate',
+		    	autoScale:true
+		    }
+    	},
+    	dimensions:{
+    	  to:{
+    		  type:'order'
+    	  },
+    	  votes:{
+    		  type:'measure'
+    	  }
+    	},
+	    x: 'votes',
+	    y: 'to',
+	    color: 'to',
+	    data: data.items,
+	    plugins:
+	    	[
+	    		tauCharts.api.plugins.get('tooltip')({
+	    			fields:['toName','toUrl','to','votes'],
+	    			formatters: {
+	    				toUrl: {
+	    					label : 'URL'
+	    				},
+	    				toName:{
+	    					label: 'Name'
+	    				},
+	    				to:{
+	    					label: 'Address'
+	    				}
+	    			}
+	    		})
+	    		
+	    	]
+	});
+	chart.renderTo('#currentVotes');
+})
+/*
+new QRCode(document.getElementById("qrcode"), {
+	text:"{{account.address}}",
+	width: 128,
+	height: 128
+	});
+*/
+
+</script>
+
+
+{%endblock%}
+
+
+

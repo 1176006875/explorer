@@ -1,0 +1,101 @@
+{% extends "main" %}
+{% block title %}Tron transactions list{% endblock %}
+{%block description%}See all transactions on Tron blockchain{%endblock%}
+
+{% block header %} 
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jspanel3/3.10.0/jquery.jspanel.min.css"/> -->
+
+{% endblock %}
+
+{% block content %}
+
+	
+<h1 class="ui dividing header"><small><i class="icon exchange"></i>Transactions</small></h1>
+	
+<div class="ui vertical stripe segment" style="background: #f5f5f5;opacity: 0.7;">
+    <div class="ui stackable four column centered grid container">
+      
+			
+			<div class="ui center aligned column">
+
+			  <div class="ui small grey statistic">
+			    <div class="value">
+			      <small>{{stats.totalTx|numberlocale}}</small>
+			    </div>
+			    <div class="label">
+			      Total transactions
+			    </div>
+			  </div>
+		  </div>
+		  
+		  <div class="ui center aligned column">
+			  <div class="ui small green statistic">
+			    <div class="value">
+			      <small>{{stats.totalTxConfirmed|numberlocale}}</small>
+			    </div>
+			    <div class="label">
+			    	TX confirmed
+			    </div>
+			  </div>
+		</div>	  
+
+		  <div class="ui center aligned column">			
+			  <div class="ui small yellow statistic">
+			    <div class="value">
+			      <small>{{stats.totalTx6h|numberlocale}}</small>
+			    </div>
+			    <div class="label">
+			      TX Last 6h
+			    </div>
+			  </div>
+		</div>
+		
+		<div class="ui center aligned column">
+			  <div class="ui small orange statistic">
+			    <div class="value">
+			      <small>{{stats.totalTx24h|numberlocale}}</small>
+			    </div>
+			    <div class="label">
+			      TX Last 24h
+			    </div>
+			  </div>
+		</div>
+			
+			
+      </div>
+
+      </div>
+
+
+<table class="ui fixed striped table">
+	<thead>
+		<tr>
+			<th class="center aligned">Hash</th>
+			<th class="center aligned">Block</th>
+			<th class="center aligned">Timestamp</th>
+			<th class="center aligned">Status</th>
+			<th class="center aligned">From</th>
+			<th class="center aligned">Type</th>
+		</tr>
+	</thead>
+	<tbody>
+		{%for tx in list.items%}
+		<tr class="center aligned">
+			<td><a href="/tx/{{tx.hash}}">{{tx.hash}}</a></td>
+			<td><a href="/block/{{tx.block}}">{{tx.block}}</a></td>
+			<td><span class="timestamp">{{tx.timestamp}}</span></td>
+			<td>{%if tx.confirmed==true%}<span class="ui small green label">Confirmed</span>{%else%}<span class="ui small red label">Unconfirmed</span>{%endif%}</td>
+			<td><a href="/address/{{tx.from}}">{{tx.from}}</a></td>
+			<td><span class="ui tiny label">{{tx.type}}</span></td>
+		</tr>
+		{%endfor%}
+	</tbody>
+ <tfoot>
+    <tr><th colspan="6">
+		{% include 'partials/pagination' %}
+  </tr></tfoot>
+</table>
+
+
+
+{%endblock%}
