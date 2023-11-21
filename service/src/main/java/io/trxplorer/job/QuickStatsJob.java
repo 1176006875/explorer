@@ -219,8 +219,8 @@ public class QuickStatsJob {
 		
 		this.topNodeCountry = new HashMap<>();
 		
-		this.topNodeCountry.put("country",topCountry.get(0));
-		this.topNodeCountry.put("nodes", topCountry.get(1));
+		this.topNodeCountry.put("country",topCountry == null ? 0 : topCountry.get(0));
+		this.topNodeCountry.put("nodes", topCountry == null ? 0 : topCountry.get(1));
 		
 		//total nodes discovered
 		this.totalNodesDiscovered = this.dslContext.select(DSL.count()).from(NODE).fetchOneInto(Integer.class);

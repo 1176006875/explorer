@@ -14,9 +14,7 @@
 
 	<name>SyncNode</name>
 	<description>Synchronization node: synchronizes database with Tron blockchain</description>
-
-
-
+<!--	<version>1.0.0</version>-->
 
 
 	<properties>
@@ -30,6 +28,14 @@
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.tron</groupId>
+			<artifactId>framework</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${pom.basedir}/../java-tron-Odyssey-v3.2.1.1.jar</systemPath>
+		</dependency>
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -203,11 +209,11 @@
 		</dependency>
 
 		<!-- Tests -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>junit</groupId>-->
+<!--			<artifactId>junit</artifactId>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>io.rest-assured</groupId>

@@ -43,42 +43,57 @@
 			<version>7ca94a62c5dfa336a6e2cdb195f88e03c9f7acdb</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
 		<dependency>
-		<groupId>com.github.tronprotocol</groupId>
-			<artifactId>java-tron</artifactId>
-			<version>${java-tron.version}</version>
-			<exclusions><!-- RESOLVE CONFLICTS ISSUE -->
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-common</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-buffer</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-codec</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-handler</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-transport</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-resolver</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-transport-native-epoll</artifactId>
-				</exclusion>
-			</exclusions>
-
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.tron</groupId>
+			<artifactId>framework</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${pom.basedir}/../java-tron-Odyssey-v3.2.1.1.jar</systemPath>
+		</dependency>
+
+<!--		<dependency>-->
+<!--			<groupId>com.github.tronprotocol</groupId>-->
+<!--			<artifactId>java-tron</artifactId>-->
+<!--			<version>${java-tron.version}</version>-->
+<!--			<exclusions>&lt;!&ndash; RESOLVE CONFLICTS ISSUE &ndash;&gt;-->
+<!--				<exclusion>-->
+<!--					<groupId>io.netty</groupId>-->
+<!--					<artifactId>netty-common</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<groupId>io.netty</groupId>-->
+<!--					<artifactId>netty-buffer</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<groupId>io.netty</groupId>-->
+<!--					<artifactId>netty-codec</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<groupId>io.netty</groupId>-->
+<!--					<artifactId>netty-handler</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<groupId>io.netty</groupId>-->
+<!--					<artifactId>netty-transport</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<groupId>io.netty</groupId>-->
+<!--					<artifactId>netty-resolver</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<groupId>io.netty</groupId>-->
+<!--					<artifactId>netty-transport-native-epoll</artifactId>-->
+<!--				</exclusion>-->
+<!--			</exclusions>-->
+
+<!--		</dependency>-->
 
 		<!-- RESOLVE CONFLICTS ISSUE -->
 		<dependency>
@@ -215,11 +230,11 @@
 		</dependency>
 
 		<!-- Tests -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>junit</groupId>-->
+<!--			<artifactId>junit</artifactId>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>io.rest-assured</groupId>

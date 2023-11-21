@@ -71,7 +71,7 @@ public class AccountService {
 			.returning(ACCOUNT.ID)
 			.fetchOne();
 			
-		}else {
+		} else {
 			
 			//Update if exists
 			this.dslContext.update(ACCOUNT)
@@ -90,7 +90,6 @@ public class AccountService {
 			.set(ACCOUNT.PARTICIPATIONS_COUNT,DSL.select(DSL.count()).from(CONTRACT_PARTICIPATE_ASSET_ISSUE).where(CONTRACT_PARTICIPATE_ASSET_ISSUE.OWNER_ADDRESS.eq(address)))
 			.where(ACCOUNT.ID.eq(record.getId()))
 			.execute();
-			
 			
 		}
 		

@@ -23,7 +23,7 @@
 		<dependency>
 			<groupId>com.github.tronprotocol</groupId>
 			<artifactId>java-tron</artifactId>
-			<version>${java-tron.version}</version>
+			<version>Odyssey-v3.2.1.1</version>
 			<exclusions><!-- RESOLVE CONFLICTS ISSUE -->
 				<exclusion>
 					<groupId>io.netty</groupId>
@@ -55,6 +55,14 @@
 				</exclusion>
 			</exclusions>
 
+		</dependency>
+
+		<dependency>
+			<groupId>org.tron</groupId>
+			<artifactId>framework</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${pom.basedir}/../java-tron-Odyssey-v3.2.1.1.jar</systemPath>
 		</dependency>
 
 		<!-- RESOLVE CONFLICTS ISSUE -->

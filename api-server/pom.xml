@@ -191,10 +191,18 @@
 		</dependency>
 
 		<!-- Tests -->
+<!--		<dependency>-->
+<!--			<groupId>junit</groupId>-->
+<!--			<artifactId>junit</artifactId>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
+
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
+			<groupId>org.tron</groupId>
+			<artifactId>framework</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${pom.basedir}/../java-tron-Odyssey-v3.2.1.1.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -203,11 +211,11 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.github.kenglxn.qrgen</groupId>
-			<artifactId>javase</artifactId>
-			<version>2.3.0</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.github.kenglxn.qrgen</groupId>-->
+<!--			<artifactId>javase</artifactId>-->
+<!--			<version>2.3.0</version>-->
+<!--		</dependency>-->
 
 
 		<dependency>

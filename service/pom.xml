@@ -42,12 +42,20 @@
 			<version>1.3.0</version>
 		</dependency>
 
-		<!-- Tests -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
+			<groupId>org.tron</groupId>
+			<artifactId>framework</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${pom.basedir}/../java-tron-Odyssey-v3.2.1.1.jar</systemPath>
 		</dependency>
+
+		<!-- Tests -->
+<!--		<dependency>-->
+<!--			<groupId>junit</groupId>-->
+<!--			<artifactId>junit</artifactId>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
 
 
 	</dependencies>

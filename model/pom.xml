@@ -16,11 +16,10 @@
 	<name>Model</name>
 
 
-
 	<properties>
 		<jooq.packageName>io.trxplorer.model</jooq.packageName>
-		<createTable.sqlCommand>create database tmp CHARACTER SET utf8</createTable.sqlCommand>
-		<mysql.container.timeout>120000</mysql.container.timeout>
+		<createTable.sqlCommand>create database if not exists tmp CHARACTER SET utf8</createTable.sqlCommand>
+		<mysql.container.timeout>30000</mysql.container.timeout>
 		<flyway.locations>filesystem:${basedir}/src/main/resources/trxplorer/db/migration/common</flyway.locations>
 	</properties>
 
@@ -36,6 +35,13 @@
 			<version>${mysql.connector.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.tron</groupId>
+			<artifactId>framework</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${pom.basedir}/../java-tron-Odyssey-v3.2.1.1.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 
@@ -63,6 +69,7 @@
 					<plugin>
 						<groupId>io.fabric8</groupId>
 						<artifactId>docker-maven-plugin</artifactId>
+						<version>0.40.1</version>
 						<executions>
 							<execution>
 								<id>start-database</id>
@@ -81,38 +88,48 @@
 								</goals>
 							</execution>
 						</executions>
-						<configuration>
-							<images>
-								<image>
-									<name>mysql:5.7</name>
-									<alias>mysql-test</alias>
-									<run>
-										cd
-										<log>
-											<enabled>true</enabled>
-										</log>
-										<env>
-											<MYSQL_ROOT_PASSWORD>1234</MYSQL_ROOT_PASSWORD>
-										</env>
-										<ports>
-											<port>3307:3306</port>
-										</ports>
-										<wait>
-											<time>${mysql.container.timeout}</time>
-											<tcp>
-												<ports>
-													<port>3306</port>
-												</ports>
-											</tcp>
-										</wait>
-									</run>
-								</image>
-							</images>
-						</configuration>
+<!--						<configuration>-->
+<!--							<images>-->
+<!--								<image>-->
+<!--									<name>mysql:5.7</name>-->
+<!--									<alias>mysql</alias>-->
+<!--									<run>-->
+<!--&lt;!&ndash;										cd&ndash;&gt;-->
+<!--										<network>-->
+<!--											<mode>bridge</mode>-->
+<!--										</network>-->
+<!--										<log>-->
+<!--											<enabled>true</enabled>-->
+<!--										</log>-->
+<!--										<env>-->
+<!--											<MYSQL_ROOT_PASSWORD>1234</MYSQL_ROOT_PASSWORD>-->
+<!--										</env>-->
+<!--										<ports>-->
+<!--											<port>3307:3306</port>-->
+<!--										</ports>-->
+<!--&lt;!&ndash;										<wait>&ndash;&gt;-->
+<!--&lt;!&ndash;											<time>${mysql.container.timeout}</time>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;											<http>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;												<url>jdbc:mysql://localhost:3307</url>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;											</http>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;											<tcp>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;												<mode>direct</mode>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;												<host>localhost</host>&ndash;&gt;-->
+<!--&lt;!&ndash;												<ports>&ndash;&gt;-->
+<!--&lt;!&ndash;													<port>3307</port>&ndash;&gt;-->
+<!--&lt;!&ndash;												</ports>&ndash;&gt;-->
+<!--&lt;!&ndash;											</tcp>&ndash;&gt;-->
+<!--&lt;!&ndash;										</wait>&ndash;&gt;-->
+<!--									</run>-->
+<!--								</image>-->
+<!--							</images>-->
+<!--						</configuration>-->
 					</plugin>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>sql-maven-plugin</artifactId>
+						<version>1.5</version>
 
 						<dependencies>
 							<!-- specify the dependent jdbc driver here -->
@@ -124,7 +141,7 @@
 						</dependencies>
 
 						<configuration>
-							<driver>com.mysql.jdbc.Driver</driver>
+							<driver>com.mysql.cj.jdbc.Driver</driver>
 							<url>jdbc:mysql://localhost:3307</url>
 							<username>root</username>
 							<password>1234</password>
@@ -153,7 +170,7 @@
 						<artifactId>flyway-maven-plugin</artifactId>
 						<version>${flyway.version}</version>
 						<configuration>
-							<driver>com.mysql.jdbc.Driver</driver>
+							<driver>com.mysql.cj.jdbc.Driver</driver>
 							<url>jdbc:mysql://localhost:3307/tmp</url>
 							<user>root</user>
 							<password>1234</password>
@@ -193,7 +210,7 @@
 
 							<!-- JDBC connection parameters -->
 							<jdbc>
-								<driver>com.mysql.jdbc.Driver</driver>
+								<driver>com.mysql.cj.jdbc.Driver</driver>
 								<url>jdbc:mysql://localhost:3307</url>
 								<user>root</user>
 								<password>1234</password>

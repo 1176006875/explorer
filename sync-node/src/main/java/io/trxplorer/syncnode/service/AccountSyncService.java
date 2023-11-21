@@ -59,7 +59,7 @@ public class AccountSyncService {
 		
 		
 		
-		logger.debug("=> Syncing account:"+address);
+		logger.info("=> Syncing account:"+address);
 		
 		this.startSync(address);
 		
