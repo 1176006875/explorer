@@ -94,7 +94,7 @@ The api server is running on http://localhost:8383
 The search engine is based on redisearch, you can start it as follow:
 
 ``` bash
-$ docker run --name redisearch -p 6379:6379 redislabs/redisearch:latest redis-server /data/redis.conf --loadmodule "/usr/lib/redis/modules/redisearch.so"
+$ docker run -d --name redis-stack -p 6379:6379 redis/redis-stack:latest
 ```
 
 Then run the search engine:
