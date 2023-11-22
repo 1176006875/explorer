@@ -26,7 +26,7 @@ public class AccountSyncJob {
 	}
 
 	//10ms的话，数据库性能跟不上
-	@Scheduled("50ms")
+	@Scheduled("100ms")
 	public void syncAccount() throws ServiceException {
 		
 		if (!this.config.isAccountJobEnabled()) {
