@@ -49,7 +49,7 @@ The synchronization node (syncnode module) was built so that it can keep up with
 *Start a mysql instance for example with docker*
 
 ``` bash
-$ docker run --name mysql -e MYSQL_ROOT_PASSWORD=toto -p 3306:3306 -d mysql:5.7
+$ docker run --name mysql -e MYSQL_ROOT_PASSWORD=1234 -p 3307:3306 -d mysql:5.7
 ```
 
 Then create a schema with the name: trxplorer_dev. You don't have to do anything else, when you will run any of the server modules, flyway will take care of creating/migrate the database schema
