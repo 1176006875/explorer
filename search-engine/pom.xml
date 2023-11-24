@@ -9,16 +9,10 @@
 		<version>1.0.73-SNAPSHOT</version>
 	</parent>
 
-
 	<artifactId>searchengine</artifactId>
-
 
 	<name>Seach Engine</name>
 	<description>Trxplorer search engine</description>
-
-
-
-
 
 	<properties>
 		<jooby.version>1.3.0</jooby.version>
@@ -41,13 +35,6 @@
 			<groupId>com.github.nfleury</groupId>
 			<artifactId>JRediSearch</artifactId>
 			<version>7ca94a62c5dfa336a6e2cdb195f88e03c9f7acdb</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.12.0</version>
 		</dependency>
 
 		<dependency>
