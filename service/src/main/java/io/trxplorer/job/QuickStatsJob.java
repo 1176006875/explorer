@@ -262,7 +262,7 @@ public class QuickStatsJob {
 		
 
 		int totalExchanges = this.dslContext.select(DSL.count())
-		.from(DSL.select()
+		.from(DSL.select(MARKET.SOURCE)
 				.from(MARKET)
 				.where(MARKET.SOURCE.ne("CMC"))
 				.and(MARKET.DAY.eq(day))
