@@ -29,8 +29,18 @@ When building the model: a maven plugin starts a docker container, runs flyway o
 
 ## Building the project
 
-``` bash
+``` downloading
 git checkout git@github.com:trxplorer/explorer.git
+
+```
+
+**install**
+``` 
+
+*Start a mysql instance for example with docker*
+
+``` bash
+$ docker run --name mysql -e MYSQL_ROOT_PASSWORD=1234 -p 3307:3306 -d mysql:5.7
 
 $ cd explorer
 $ mvn install
@@ -45,23 +55,17 @@ In order to run the explorer, you will have to retrieve some data from TRON bloc
 
 The synchronization node (syncnode module) was built so that it can keep up with TRON high TPS. Multiple instance of the node can be run simultaneously in order to operate and sychronize quickly if necessary.
 
-
-*Start a mysql instance for example with docker*
-
-``` bash
-$ docker run --name mysql -e MYSQL_ROOT_PASSWORD=1234 -p 3307:3306 -d mysql:5.7
-```
-
 Then create a schema with the name: trxplorer_dev. You don't have to do anything else, when you will run any of the server modules, flyway will take care of creating/migrate the database schema
 
 
 *To start a single synchronization node run:*
 
+Creating a database:trxplorer_dev
+
 ``` bash
 $ cd sync-node
 $ mvn jooby:run
 ```
-
 
 *To start multiple nodes simultaneously*
 
@@ -100,6 +104,7 @@ $ docker run -d --name redis-stack -p 6379:6379 redis/redis-stack:latest
 Then run the search engine:
 
 ``` bash
+cd search-engine
 $ mvn jooby:run
 ```
 
