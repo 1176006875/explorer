@@ -37,6 +37,13 @@
 			<version>7ca94a62c5dfa336a6e2cdb195f88e03c9f7acdb</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.tron</groupId>
 			<artifactId>framework</artifactId>
