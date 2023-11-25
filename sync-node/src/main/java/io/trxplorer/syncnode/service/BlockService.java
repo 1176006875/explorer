@@ -41,7 +41,7 @@ public class BlockService {
 	
 	/**
 	 * Import a new block into db
-	 * @param blockNum
+	 * @param
 	 * @throws ServiceException 
 	 */
 	public void importBlock(Block block) throws ServiceException {
@@ -50,34 +50,32 @@ public class BlockService {
 		
 		try {
 		
-		
-		BlockRecord record = new BlockRecord();
-		
-		String parentHash = Sha256Hash.wrap(block.getBlockHeader().getRawData().getParentHash()).toString();
-	
-		//Sha256Hash.of(block.getBlockHeader().getRawData().toByteArray()).toString()
-	
-		record.setTxCount(UInteger.valueOf(block.getTransactionsCount()));
-		record.setWitnessAddress(Wallet.encode58Check(block.getBlockHeader().getRawData().getWitnessAddress().toByteArray()));
-		record.setNum(ULong.valueOf(block.getBlockHeader().getRawData().getNumber()));
-		//record.setHash(Sha256Hash.wrap(Sha256Hash.of(block.getBlockHeader().getRawData().toByteArray()).getBytes()).toString());
-		record.setParentHash(parentHash);
-		record.setTimestamp(Timestamp.valueOf(Instant.ofEpochMilli(block.getBlockHeader().getRawData().getTimestamp()).atOffset(ZoneOffset.UTC).toLocalDateTime()));
-		record.setSize(UInteger.valueOf(block.getSerializedSize()));
+			BlockRecord record = new BlockRecord();
 
-		
-		//store block
-		record.attach(this.dslContext.configuration());
-		record.store();
-		
-		if (blockNum>0) {
-			this.dslContext.update(BLOCK).set(BLOCK.HASH,parentHash).where(BLOCK.NUM.eq(ULong.valueOf(blockNum-1))).execute();
-		}
-		
-		// Create transactions
-		for(Transaction transaction:block.getTransactionsList()) {
-			this.txService.importTransaction(transaction, record);
-		}
+			String parentHash = Sha256Hash.wrap(block.getBlockHeader().getRawData().getParentHash()).toString();
+
+			//Sha256Hash.of(block.getBlockHeader().getRawData().toByteArray()).toString()
+
+			record.setTxCount(UInteger.valueOf(block.getTransactionsCount()));
+			record.setWitnessAddress(Wallet.encode58Check(block.getBlockHeader().getRawData().getWitnessAddress().toByteArray()));
+			record.setNum(ULong.valueOf(block.getBlockHeader().getRawData().getNumber()));
+			//record.setHash(Sha256Hash.wrap(Sha256Hash.of(block.getBlockHeader().getRawData().toByteArray()).getBytes()).toString());
+			record.setParentHash(parentHash);
+			record.setTimestamp(Timestamp.valueOf(Instant.ofEpochMilli(block.getBlockHeader().getRawData().getTimestamp()).atOffset(ZoneOffset.UTC).toLocalDateTime()));
+			record.setSize(UInteger.valueOf(block.getSerializedSize()));
+
+			//store block
+			record.attach(this.dslContext.configuration());
+			record.store();
+
+			if (blockNum>0) {
+				this.dslContext.update(BLOCK).set(BLOCK.HASH,parentHash).where(BLOCK.NUM.eq(ULong.valueOf(blockNum-1))).execute();
+			}
+
+			// Create transactions
+			for(Transaction transaction:block.getTransactionsList()) {
+				this.txService.importTransaction(transaction, record);
+			}
 		}catch(ServiceException e) {
 			
 			this.dslContext.insertInto(BLOCK_ERROR)
@@ -90,8 +88,7 @@ public class BlockService {
 		}
 
 	}
-	
-	
+
 	
 	public io.trxplorer.model.tables.pojos.Block getBlockByNum(long num){
 		
@@ -144,8 +141,6 @@ public class BlockService {
 			.execute();
 			
 		}
-		
 
-		
 	}
 }

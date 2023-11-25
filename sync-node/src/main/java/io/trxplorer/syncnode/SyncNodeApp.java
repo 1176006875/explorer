@@ -1,5 +1,6 @@
 package io.trxplorer.syncnode;
 
+import io.trxplorer.syncnode.job.*;
 import org.jooby.Jooby;
 import org.jooby.flyway.Flywaydb;
 import org.jooby.jdbc.Jdbc;
@@ -11,14 +12,6 @@ import org.jooq.conf.Settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.trxplorer.syncnode.job.AccountSyncJob;
-import io.trxplorer.syncnode.job.BlockSyncJob;
-import io.trxplorer.syncnode.job.MarketJob;
-import io.trxplorer.syncnode.job.NodeSyncJob;
-import io.trxplorer.syncnode.job.ReSyncJob;
-import io.trxplorer.syncnode.job.SyncNodeJob;
-import io.trxplorer.syncnode.job.VotingRoundJob;
-import io.trxplorer.syncnode.job.WitnessSyncJob;
 import io.trxplorer.troncli.TronFullNodeCli;
 import io.trxplorer.troncli.TronSolidityNodeCli;
 
@@ -37,7 +30,8 @@ public class SyncNodeApp extends Jooby {
 		use(new Flywaydb());
 
 		
-		use(new Quartz(SyncNodeJob.class,BlockSyncJob.class,WitnessSyncJob.class,AccountSyncJob.class,NodeSyncJob.class,MarketJob.class,VotingRoundJob.class,ReSyncJob.class));
+//		use(new Quartz(SyncNodeJob.class,BlockSyncJob.class,WitnessSyncJob.class,AccountSyncJob.class,NodeSyncJob.class,MarketJob.class,VotingRoundJob.class,ReSyncJob.class));
+		use(new Quartz(SyncNodeJob.class,BlockSyncJob.class,WitnessSyncJob.class,AccountSyncJob.class,NodeSyncJob.class,MarketJob.class,VotingRoundJob.class,ReSyncJob.class, AccountContextJob.class));
 
 		
 		onStart(registry -> {
@@ -55,7 +49,7 @@ public class SyncNodeApp extends Jooby {
 
 		});
 		
-		onStop((registry)->{
+			onStop((registry)->{
 
 			TronFullNodeCli fullCli = registry.require(TronFullNodeCli.class);
 			fullCli.shutdown();

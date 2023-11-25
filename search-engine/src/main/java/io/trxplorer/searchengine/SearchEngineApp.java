@@ -18,12 +18,9 @@ public class SearchEngineApp extends Jooby {
 
 	{
 
-
-
 		use(new Jdbc());
 		use(new jOOQ());
 
-		
 		use(new Flywaydb());
 
 		use(new RedisModule());
