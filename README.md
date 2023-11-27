@@ -47,6 +47,15 @@ $ mvn install
 
 ```
 
+```
+mysql指定目录，把上面的mysql启动完成之后，
+
+docker stop mysql
+docker rm -f mysql
+
+docker run --name mysql -e MYSQL_ROOT_PASSWORD=1234 -p 3307:3306 -v /tron/mysql/conf/mysql/conf.d:/etc/mysql/conf.d -v /tron/mysql/logs:/var/log/mysql -v /tron/mysql/data/mysql:/var/lib/mysql -d mysql:5.7
+```
+
 ## Running the explorer
 
 In order to run the explorer, you will have to retrieve some data from TRON blockchain explorer first:
