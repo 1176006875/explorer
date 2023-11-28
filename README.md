@@ -71,6 +71,10 @@ Then create a schema with the name: trxplorer_dev. You don't have to do anything
 
 Creating a database:trxplorer_dev
 
+```
+create database if not exists trxplorer_dev CHARACTER SET utf8
+```
+
 ``` bash
 $ cd sync-node
 $ mvn jooby:run
