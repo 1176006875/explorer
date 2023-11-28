@@ -142,7 +142,7 @@
 
 						<configuration>
 							<driver>com.mysql.cj.jdbc.Driver</driver>
-							<url>jdbc:mysql://127.0.0.1:12316</url>
+							<url>jdbc:mysql://localhost:12316</url>
 							<username>root</username>
 							<password>"gBKislp2Mrl4k"</password>
 						</configuration>
@@ -171,7 +171,7 @@
 						<version>${flyway.version}</version>
 						<configuration>
 							<driver>com.mysql.cj.jdbc.Driver</driver>
-							<url>jdbc:mysql://127.0.0.1:12316/tmp</url>
+							<url>jdbc:mysql://localhost:12316/tmp</url>
 							<user>root</user>
 							<password>"gBKislp2Mrl4k"</password>
 							<schemas>
@@ -211,7 +211,7 @@
 							<!-- JDBC connection parameters -->
 							<jdbc>
 								<driver>com.mysql.cj.jdbc.Driver</driver>
-								<url>jdbc:mysql://127.0.0.1:12316</url>
+								<url>jdbc:mysql://localhost:12316</url>
 								<user>root</user>
 								<password>"gBKislp2Mrl4k"</password>
 							</jdbc>
