@@ -131,11 +131,3 @@ $ mvn jooby:run
 ```
 
 It will start the explorer on http://localhost:8080
- 
-
-
-
-
-
-
-
