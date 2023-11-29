@@ -23,7 +23,6 @@ import io.trxplorer.troncli.TronFullNodeCli;
 @DisallowConcurrentExecution
 public class ReSyncJob {
 
-
 	private DSLContext dslContext;
 	private BlockService blockService;
 	private TronFullNodeCli fullNodeCli;

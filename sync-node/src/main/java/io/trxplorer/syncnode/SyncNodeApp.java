@@ -31,9 +31,8 @@ public class SyncNodeApp extends Jooby {
 
 		
 //		use(new Quartz(SyncNodeJob.class,BlockSyncJob.class,WitnessSyncJob.class,AccountSyncJob.class,NodeSyncJob.class,MarketJob.class,VotingRoundJob.class,ReSyncJob.class));
-		use(new Quartz(SyncNodeJob.class,BlockSyncJob.class,WitnessSyncJob.class,AccountSyncJob.class,NodeSyncJob.class,MarketJob.class,VotingRoundJob.class,ReSyncJob.class, AccountContextJob.class));
+		use(new Quartz(SyncNodeJob.class,BlockSyncJob.class,WitnessSyncJob.class,AccountSyncJob.class,NodeSyncJob.class,MarketJob.class,VotingRoundJob.class, AccountContextJob.class, AccountVoteJob.class, ReSyncBlocksJob.class));
 
-		
 		onStart(registry -> {
 			
 			SyncNodeConfig config = registry.require(SyncNodeConfig.class);
