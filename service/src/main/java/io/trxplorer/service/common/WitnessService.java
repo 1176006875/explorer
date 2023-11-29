@@ -33,24 +33,26 @@ public class WitnessService {
 		this.dslContext = dslContext;
 		this.tronFullNodeCli = tronService;
 	}
-	
-	
-	
+
+
 	public WitnessModel getWitnessByAddress(String address) {
-		
-		WitnessModel result = this.dslContext.select(WITNESS.URL,WITNESS.VOTE_COUNT,WITNESS.TOTAL_MISSED,WITNESS.TOTAL_PRODUCED,DSL.sum(ACCOUNT_VOTE.VOTE_COUNT).as("liveVotes"))
-		.from(WITNESS)
-		.leftOuterJoin(ACCOUNT_VOTE).on(ACCOUNT_VOTE.VOTE_ADDRESS.eq(WITNESS.ADDRESS))
-		.where(WITNESS.ADDRESS.eq(address))
-		.and(WITNESS.ADDRESS.eq(ACCOUNT_VOTE.VOTE_ADDRESS))
-		.fetchOneInto(WitnessModel.class);
-		
-		Long genesisVotes = Constants.genesisVotes.get(address); 
-		if (genesisVotes!=null) {
-			result.setLiveVotes(result.getLiveVotes()+genesisVotes);
+
+		WitnessModel result = this.dslContext.select(WITNESS.URL, WITNESS.VOTE_COUNT, WITNESS.TOTAL_MISSED, WITNESS.TOTAL_PRODUCED)
+				.from(WITNESS)
+				.where(WITNESS.ADDRESS.eq(address))
+				.fetchOneInto(WitnessModel.class);
+
+		WitnessModel liveVotes = this.dslContext.select(DSL.sum(ACCOUNT_VOTE.VOTE_COUNT).as("liveVotes"))
+				.from(ACCOUNT_VOTE)
+				.where(ACCOUNT_VOTE.VOTE_ADDRESS.eq(address))
+				.fetchOneInto(WitnessModel.class);
+
+		Long genesisVotes = Constants.genesisVotes.get(address);
+		if (genesisVotes != null) {
+			result.setLiveVotes(liveVotes.getLiveVotes() + genesisVotes);
 		}
-		
-		return result; 
+
+		return result;
 	}
 	
 	
