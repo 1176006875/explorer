@@ -110,7 +110,7 @@ CREATE TABLE `contract_asset_issue` (
   `end_time` datetime(3) DEFAULT NULL,
   `decay_ratio` int(10) unsigned DEFAULT NULL,
   `vote_score` int(11) DEFAULT NULL,
-  `description` varchar(750) DEFAULT NULL,
+  `description` varchar(750) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `url` varchar(250) DEFAULT NULL,
   `transaction_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
