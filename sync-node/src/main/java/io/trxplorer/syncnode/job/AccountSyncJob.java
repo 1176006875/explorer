@@ -31,16 +31,16 @@ public class AccountSyncJob {
 //		log.info("syncAccount50-end");
 //	}
 
-    @Scheduled("20ms")
-    public void syncAccountVote() throws ServiceException {
-
-        if (!this.config.isAccountJobEnabled()) {
-            return;
-        }
-
-        this.accountSyncService.syncAccountVote();
-
-    }
+//    @Scheduled("20ms")
+//    public void syncAccountVote() throws ServiceException {
+//
+//        if (!this.config.isAccountJobEnabled()) {
+//            return;
+//        }
+//
+//        this.accountSyncService.syncAccountVote();
+//
+//    }
 
     @Scheduled("30ms")
     public void syncAccountResync() throws ServiceException {
