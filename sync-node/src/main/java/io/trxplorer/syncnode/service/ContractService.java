@@ -259,11 +259,7 @@ public class ContractService {
             }
 
         }
-        logger.info("contractRecords-size:{}", contractRecords.size());
-        //添加日志查询错误
-        for (int i = 0; i < contractRecords.size(); i++) {
-            logger.info("contractRecords-i:{},description:{}", i, contractRecords.get(i).get("description"));
-        }
+
         this.dslContext.batchInsert(contractRecords).execute();
     }
 
