@@ -261,7 +261,8 @@ public class ContractService {
         }
         //添加日志查询错误
         for (int i = 0; i < contractRecords.size(); i++) {
-            logger.info("contractRecords-{},toJSON:{}", i, JSONObject.toJSON(contractRecords.get(i)));
+            logger.info("contractRecords-{}", i);
+            logger.info("contractRecords-toJSON:{}", contractRecords.get(i).toString());
         }
         this.dslContext.batchInsert(contractRecords).execute();
     }
