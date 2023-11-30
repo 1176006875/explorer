@@ -126,10 +126,11 @@ public class QuickStatsJob {
 		.fetchOneInto(Long.class);		
 		
 		//TX confirmed
-		this.totalTxConfirmed = this.dslContext.select(DSL.count())
-				.from(TRANSACTION)
-				.where(TRANSACTION.CONFIRMED.eq(Byte.valueOf((byte)1)))
-				.fetchOneInto(Long.class);
+//		this.totalTxConfirmed = this.dslContext.select(DSL.count())
+//				.from(TRANSACTION)
+//				.where(TRANSACTION.CONFIRMED.eq(Byte.valueOf((byte)1)))
+//				.fetchOneInto(Long.class);
+		this.totalTxConfirmed = 0L;
 		
 		//Repesentative total
 		this.totalRepresentative = this.dslContext.select(DSL.count())

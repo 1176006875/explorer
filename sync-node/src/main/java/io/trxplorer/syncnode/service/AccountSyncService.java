@@ -57,17 +57,13 @@ public class AccountSyncService {
 			return;
 		}
 		
-		
-		
 		logger.info("=> syncAccounts account:"+address);
 		
 		this.startSync(address);
 		
 		this.accountService.createOrUpdateAccount(address);
-		
-		
+
 		this.endSync(address);
-			
 	}
 	
 	
