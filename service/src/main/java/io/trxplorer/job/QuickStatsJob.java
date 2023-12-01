@@ -162,17 +162,16 @@ public class QuickStatsJob {
 
 
 		//Representative best all
-		Record2<String, Integer> repBestAll = this.dslContext.select(BLOCK.WITNESS_ADDRESS,DSL.count().divide(totalBlocks).multiply(100).as("count"))
-		.from(BLOCK)
-		.groupBy(BLOCK.WITNESS_ADDRESS)
-		.orderBy(DSL.field("count").desc())
-		.limit(1)
-		.fetchOne();
-		;
+//		Record2<String, Integer> repBestAll = this.dslContext.select(BLOCK.WITNESS_ADDRESS,DSL.count().divide(totalBlocks).multiply(100).as("count"))
+//		.from(BLOCK)
+//		.groupBy(BLOCK.WITNESS_ADDRESS)
+//		.orderBy(DSL.field("count").desc())
+//		.limit(1)
+//		.fetchOne();
 		
 		this.bestRepAll = new HashMap<>();
-		this.bestRepAll.put("address", repBestAll.get(0));
-		this.bestRepAll.put("percentage", repBestAll.get(1));
+		this.bestRepAll.put("address", "address");
+		this.bestRepAll.put("percentage", 0);
 		
 		//Total Accounts
 		this.totalAccounts = this.dslContext.select(DSL.count())
