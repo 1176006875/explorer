@@ -99,11 +99,11 @@ public class QuickStatsJob {
 		.fetchOneInto(Integer.class);
 		
 		//Blocks confirmed
-		this.totalBlocksConfirmed = this.dslContext.select(DSL.count())
-				.from(BLOCK)
-				.where(BLOCK.CONFIRMED.eq(Byte.valueOf((byte)1)))
-				.fetchOneInto(Long.class);
-		
+//		this.totalBlocksConfirmed = this.dslContext.select(DSL.count())
+//				.from(BLOCK)
+//				.where(BLOCK.CONFIRMED.eq(Byte.valueOf((byte)1)))
+//				.fetchOneInto(Long.class);
+		this.totalBlocksConfirmed = 0L;
 		
 		
 		//Tx total
