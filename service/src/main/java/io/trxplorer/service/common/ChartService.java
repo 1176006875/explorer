@@ -51,11 +51,11 @@ public class ChartService {
 			
 		}
 			
-		Record txInfo = this.dslContext.select(DSL.count().as("totalTx")).from(TRANSACTION)
-		.where(DSL.month(TRANSACTION.TIMESTAMP).eq(month))
-		.and(DSL.day(TRANSACTION.TIMESTAMP).eq(day))
-		.and(DSL.year(TRANSACTION.TIMESTAMP).eq(year))
-		.fetchOne();
+//		Record txInfo = this.dslContext.select(DSL.count().as("totalTx")).from(TRANSACTION)
+//		.where(DSL.month(TRANSACTION.TIMESTAMP).eq(month))
+//		.and(DSL.day(TRANSACTION.TIMESTAMP).eq(day))
+//		.and(DSL.year(TRANSACTION.TIMESTAMP).eq(year))
+//		.fetchOne();
 
 //		 Record blocksInfo = this.dslContext.select(DSL.count().as("totalBlocks"),DSL.avg(BLOCK.SIZE).as("blockSizeAvg"),DSL.avg(BLOCK.BLOCK_TIME).as("blockTimeAvg"),DSL.avg(BLOCK.TX_COUNT).cast(String.class).as("txCountAvg"),DSL.avg(BLOCK.TX_COUNT).divide(DSL.avg(BLOCK.BLOCK_TIME)).cast(String.class).as("tps_avg")).from(BLOCK)
 //		.where(DSL.month(BLOCK.TIMESTAMP).eq(month))
@@ -63,7 +63,7 @@ public class ChartService {
 //		.and(DSL.year(BLOCK.TIMESTAMP).eq(year))
 //		.fetchOne();
 		
-		UInteger totalTx =txInfo.get("totalTx",Integer.class) == null ? UInteger.valueOf(0) : UInteger.valueOf(txInfo.get("totalTx",Integer.class)); 
+		UInteger totalTx =UInteger.valueOf(0);
 		
 		
 		record.setTotalTx(totalTx);

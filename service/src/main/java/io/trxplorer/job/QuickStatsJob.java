@@ -107,9 +107,10 @@ public class QuickStatsJob {
 		
 		
 		//Tx total
-		this.totalTx = this.dslContext.select(DSL.count())
-				.from(TRANSACTION)
-				.fetchOneInto(Long.class);		
+//		this.totalTx = this.dslContext.select(DSL.count())
+//				.from(TRANSACTION)
+//				.fetchOneInto(Long.class);
+		this.totalTx = 0L;
 	
 		//Tx 24h
 		this.tx24h = this.dslContext.select(DSL.count())
