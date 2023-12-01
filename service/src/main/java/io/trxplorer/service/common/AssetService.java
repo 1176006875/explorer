@@ -167,11 +167,13 @@ public class AssetService {
 
 
 		
-		Integer totalCount = this.dslContext.select(DSL.count())
-				.from(TRANSFER,TRANSACTION)
-				.where(conditions)
-				.fetchOneInto(Integer.class);
-		
+//		Integer totalCount = this.dslContext.select(DSL.count())
+//				.from(TRANSFER,TRANSACTION)
+//				.where(conditions)
+//				.fetchOneInto(Integer.class);
+		//合约交易的总数
+		Integer totalCount = 0;
+
 		List<TransferModel> items = listQuery.where(conditions).orderBy(TRANSFER.TIMESTAMP.desc()).limit(criteria.getLimit()).offset(criteria.getOffSet()).fetchInto(TransferModel.class);
 		
 		
