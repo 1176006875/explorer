@@ -27,7 +27,7 @@ public class SearchEngineApp extends Jooby {
 		
 		use(new Jackson());
 		
-		use(new Quartz(IndexerJob.class));
+//		use(new Quartz(IndexerJob.class));
 		
 		onStart(registry -> {
 			
