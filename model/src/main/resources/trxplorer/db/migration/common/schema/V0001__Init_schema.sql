@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `account`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `account` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `account_name` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `account_name` varchar(250) DEFAULT NULL,
   `type` tinyint(4) NOT NULL,
   `address` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
