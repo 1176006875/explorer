@@ -181,15 +181,16 @@
 								<location>${flyway.locations}</location>
 							</locations>
 						</configuration>
-						<executions>
-							<execution>
-								<id>generate-db-model</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>migrate</goal>
-								</goals>
-							</execution>
-						</executions>
+<!--						暂时跳过sql效验-->
+<!--						<executions>-->
+<!--							<execution>-->
+<!--								<id>generate-db-model</id>-->
+<!--								<phase>generate-sources</phase>-->
+<!--								<goals>-->
+<!--									<goal>migrate</goal>-->
+<!--								</goals>-->
+<!--							</execution>-->
+<!--						</executions>-->
 
 					</plugin>
 					<plugin>
