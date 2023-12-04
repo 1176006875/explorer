@@ -49,8 +49,8 @@ public class WebApp extends Jooby {
 		use(new Jackson());
 		use(new Flywaydb());
 
-		use(new Quartz(ChartGeneratorJob.class,QuickStatsJob.class));
-		
+//		use(new Quartz(ChartGeneratorJob.class,QuickStatsJob.class));
+
 		on("dev", ()->{
 			
 			use("*", (req,res,chain)->{
