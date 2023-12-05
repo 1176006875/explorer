@@ -54,7 +54,7 @@ public class AccountSyncJob {
     }
 
 
-    @Scheduled("5m")
+//    @Scheduled("5m")
     public void removeLocks() {
         this.accountSyncService.removeLocks();
     }
