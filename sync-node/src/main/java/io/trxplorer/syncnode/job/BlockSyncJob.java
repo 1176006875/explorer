@@ -54,25 +54,25 @@ public class BlockSyncJob {
 		this.blockSyncService.syncNodeBlocks();	
 	}
 
-	@Scheduled(ChainConstant.BLOCK_PRODUCED_INTERVAL+"ms")
-	public void syncFullNodeBlocks() throws ServiceException {
-		
-		if (!this.config.isBlockJobEnabled()) {
-			return;
-		}
-		
-		Long lastBlockNum = fullNodeClient.getLastBlock().getBlockHeader().getRawData().getNumber();
-		
-		logger.info("current full node block:"+lastBlockNum);
-		
-		if (this.blockSyncService.isInitialSync()) {
-			logger.info("Initial import ... that might take a moment, grab a coffe ...");
-		}
-
-
-		this.blockSyncService.syncNodeFull(lastBlockNum);
-		
-	}
+//	@Scheduled(ChainConstant.BLOCK_PRODUCED_INTERVAL+"ms")
+//	public void syncFullNodeBlocks() throws ServiceException {
+//
+//		if (!this.config.isBlockJobEnabled()) {
+//			return;
+//		}
+//
+//		Long lastBlockNum = fullNodeClient.getLastBlock().getBlockHeader().getRawData().getNumber();
+//
+//		logger.info("current full node block:"+lastBlockNum);
+//
+//		if (this.blockSyncService.isInitialSync()) {
+//			logger.info("Initial import ... that might take a moment, grab a coffe ...");
+//		}
+//
+//
+//		this.blockSyncService.syncNodeFull(lastBlockNum);
+//
+//	}
 	
 	
 	@Scheduled(ChainConstant.BLOCK_PRODUCED_INTERVAL+10+"ms")
